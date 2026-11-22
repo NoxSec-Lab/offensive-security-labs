@@ -24,4 +24,12 @@ Testing `http://10.10.16.229/test.csv` against a local Python HTTP server (`pyth
 
 ![Status Endpoint Leak](assets/05-status-bypass.png)
 - **Leaked Upstreams:** The response exposed internal targets including `cohort.htb` (`/var/www/cohort`), `/api/` (`127.0.0.1:5000`), and `nb-1be3782a8afd3ad5.cohort.htb` (`127.0.0.1:8888`, an internal analyst workspace).[cite: 5]
-- **Next Step:** Check `nb-1be3782a8afd3ad5.cohort.htb` (and test internal ports `5000` / `8888` or `/api/` endpoints) to see what is exposed and how to pivot.[cite: 5]
+- **Next Step:** Check `nb-1be3782a8afd3ad5.cohort.htb` (and test internal ports `5000` / `8888` or `/api/` endpoints) to see what is exposed and how to pivot.
+
+## 3. Internal Workspace Enumeration & Foothold Lead
+Checking `nb-1be3782a8afd3ad5.cohort.htb` led to a Marimo notebook login screen without credentials, so I pivoted back to the SSRF to inspect the internal `8888` service:
+![Marimo Login Prompt](assets/06-marimo-login.png)
+![Marimo Version via SSRF](assets/07-marimo-version.png)
+- **Version Leaked (`0.20.4`):** Submitting `http://127.1:8888/api/version` through the URL validator returned `0.20.4`.
+- **Known Vulnerability (`CVE-2026-39987` / `GHSA-2679-6mx9-h9xc`):** Marimo versions prior to `0.23.0` have a pre-authentication RCE flaw on the `/terminal/ws` WebSocket endpoint that allows an unauthenticated interactive shell.
+- **Next Step:** Test WebSocket access to `/terminal/ws` on the notebook endpoint to gain a shell and begin local enumeration.
