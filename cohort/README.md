@@ -27,7 +27,8 @@ Testing `http://10.10.16.229/test.csv` against a local Python HTTP server (`pyth
 - **Next Step:** Check `nb-1be3782a8afd3ad5.cohort.htb` (and test internal ports `5000` / `8888` or `/api/` endpoints) to see what is exposed and how to pivot.
 
 ## 3. Internal Workspace Enumeration & Foothold Lead
-Checking `nb-1be3782a8afd3ad5.cohort.htb` led to a Marimo notebook login screen without credentials, so I pivoted back to the SSRF to inspect the internal `8888` service:
+Checking `nb-1be3782a8afd3ad5.cohort.htb` led to a Marimo notebook login screen, without credentials I had to pivoted back to the SSRF to inspect the internal `8888` service:
+
 ![Marimo Login Prompt](assets/06-marimo-login.png)
 ![Marimo Version via SSRF](assets/07-marimo-version.png)
 - **Version Leaked (`0.20.4`):** Submitting `http://127.1:8888/api/version` through the URL validator returned `0.20.4`.
