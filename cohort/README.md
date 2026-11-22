@@ -34,9 +34,9 @@ Checking `nb-1be3782a8afd3ad5.cohort.htb` led to a Marimo notebook login screen;
 - **Version Leaked (`0.20.4`):** Submitting `http://127.1:8888/api/version` through the URL validator returned `0.20.4`.
 - **Known Vulnerability (`CVE-2026-39987` / `GHSA-2679-6mx9-h9xc`):** Marimo versions prior to `0.23.0` have a pre-authentication RCE flaw on the `/terminal/ws` WebSocket endpoint that allows an unauthenticated interactive shell.
 
-After activating my Python virtual environment (`source myenv/bin/activate`) and starting a Netcat listener on port `5555` (`nc -nlvp 5555`), I ran the exploit against `https://nb-1be3782a8afd3ad5.cohort.htb`[cite: 8]:
+After activating my Python virtual environment (`source myenv/bin/activate`) and starting a Netcat listener on port `5555` (`nc -nlvp 5555`), I ran the exploit against `https://nb-1be3782a8afd3ad5.cohort.htb`:
 
-![Exploit Execution on Marimo Terminal WebSocket](assets/08-marimo-exploit.png)[cite: 8]
+![Exploit Execution on Marimo Terminal WebSocket](assets/08-marimo-exploit.png)
 ![Reverse Shell and User Flag](assets/09-marimo-shell-user-flag.png)
 - **Foothold Achieved:** Connected to `wss://nb-1be3782a8afd3ad5.cohort.htb/terminal/ws` and received a reverse shell as `marimo` (`uid=1000(marimo)`).
 - **User Flag:** Retrieved `user.txt` (`adb5c4cd99b2d0e958bd271561e666f0`).
