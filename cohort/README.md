@@ -14,5 +14,5 @@ Exploring `https://cohort.htb` surfaced two primary leads:
 ![Client Insights URL Validator](assets/02-client-insights.png)
 ![Cohort Analytics Team](assets/03-team-members.png)
 - **Potential Usernames:** Identified two team members on the main site — **Mara Quinteros** and **Devin Oyelaran** — giving us candidate usernames for later authentication or vhost enumeration.
-- **SSRF Entry Point:** Under **Client Insights** ("Register a report source URL"), the app accepts a remote URL, fetches it, validates the response, and returns a short preview.
+- **Suspected SSRF Surface:** Under **Client Insights** ("Register a report source URL"), the app accepts a remote URL, fetches it, validates the response, and returns a short preview.
 - **Filter Constraint & Next Step:** The page notes that internal and loopback addresses are blocked. Next, enumerate subdomains (`*.cohort.htb`) and test how the URL validator handles redirects, alternate IP representations, or internal hostnames.
