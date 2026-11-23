@@ -1,7 +1,7 @@
 # Cohort — Hack The Box Write-Up
 
 - **Target:** `10.129.215.166` (`cohort.htb`)
-- **OS:** Ubuntu Linux
+- **OS:** Linux
 - **Focus:** Web enumeration, SSRF filter bypass, pre-auth WebSocket RCE, local privilege escalation
 
 ## About This Machine
